@@ -13,7 +13,7 @@ export class UsersService {
   async fetchUser(sortDesc: boolean): Promise<User[]> {
     return this.userRepository.find({
       order: { userId: sortDesc ? 'ASC' : 'DESC' },
-      relations: ['userId'],
+      // relations: ['userId'],
     });
   }
   async createUser(user: CreatedUserType): Promise<boolean> {
