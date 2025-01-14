@@ -8,7 +8,8 @@ import { User } from './typeorm/entity/User';
 @Module({
   imports: [TypeOrmModule.forFeature([User])],
   controllers: [UsersController],
-  providers: [UsersService],
+  providers: [UsersService, User],
+  exports: [TypeOrmModule],
 })
 export class UsersModule {
   configure(consumer: MiddlewareConsumer) {
