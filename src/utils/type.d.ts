@@ -3,3 +3,9 @@ export type CreatedUserType = {
   password: string;
   email: string;
 };
+
+export interface ReturnHttpMessage {
+  statusCode: number;
+  message: string;
+  isSuccess: boolean;
+}
