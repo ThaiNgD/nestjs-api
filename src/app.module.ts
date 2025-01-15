@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import * as dotenv from 'dotenv';
 import { DataSource } from 'typeorm';
 import { AuthModule } from './auth/auth.module';
 import { User } from './users/typeorm/entity/User';
 import { UsersModule } from './users/users.module';
-dotenv.config();
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     UsersModule,
     TypeOrmModule.forRoot({
       type: 'mysql',

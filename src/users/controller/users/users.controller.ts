@@ -4,6 +4,8 @@ import {
   Controller,
   Delete,
   Get,
+  Inject,
+  Injectable,
   Param,
   ParseBoolPipe,
   ParseIntPipe,
@@ -20,8 +22,9 @@ import { UsersService } from 'src/users/service/users/users.service';
 import { User } from 'src/users/typeorm/entity/User';
 
 @Controller('users')
+@Injectable()
 export class UsersController {
-  constructor(private userService: UsersService) {}
+  constructor(@Inject('USER_SERVICE') private userService: UsersService) {}
   @Get()
   @UseGuards(UsersGuard)
   getUsers(@Query('sortDesc', ParseBoolPipe) sortDesc: boolean) {
@@ -31,7 +34,7 @@ export class UsersController {
 
   @Get(':id')
   getUserById(@Param('id', ParseIntPipe) id: string) {
-    const foundUser = this.userService.findUserByUsername(id);
+    const foundUser = this.userService.findUserByUserId(id);
     if (!foundUser) {
       // throw new HttpException(
       //   `User with id ${id} not found`,
