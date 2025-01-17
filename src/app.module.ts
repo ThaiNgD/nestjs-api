@@ -1,14 +1,22 @@
+import * as Joi from '@hapi/joi';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { AuthModule } from './auth/auth.module';
+import { LocalAuthenticationGuard } from './auth/guards/localStrategy/localStrategy.guard';
 import { User } from './users/typeorm/entity/User';
 import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      validationSchema: Joi.object({
+        //...
+        JWT_SECRET: Joi.string().required(),
+        JWT_EXPIRATION_TIME: Joi.string().required(),
+      }),
+    }),
     UsersModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
@@ -24,7 +32,12 @@ import { UsersModule } from './users/users.module';
     AuthModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: 'APP_GUARD',
+      useClass: LocalAuthenticationGuard, // Register guard globally
+    },
+  ],
 })
 export class AppModule {
   constructor(private dataSource: DataSource) {}

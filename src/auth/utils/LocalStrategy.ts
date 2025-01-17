@@ -1,19 +1,35 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
-import { Strategy } from 'passport-local';
+import { Request } from 'express';
+import { ExtractJwt, Strategy } from 'passport-jwt';
 import { User } from 'src/users/typeorm/entity/User';
-import { LoginUser } from '../dto/LoginUser.dto';
 import { AuthService } from '../service/auth/auth.service';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
   constructor(
     @Inject('AUTH_SERVICE') private readonly AuthService: AuthService,
+    private readonly configService: ConfigService,
   ) {
-    super({ usernameField: 'email' });
+    super({
+      usernameField: 'email',
+      passReqToCallback: true,
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        (request: Request) => {
+          return request?.cookies?.Authentication;
+        },
+      ]),
+      secretOrKey: configService.get('JWT_SECRET'),
+    });
   }
-  async validate(loginUser: LoginUser): Promise<User> {
-    console.log(loginUser);
+  async validate(req: Request, email: string, password: string): Promise<User> {
+    console.log(1);
+    const loginUser = {
+      email,
+      password,
+      is_remember: req.body.is_remember,
+    };
     return this.AuthService.validateUser(loginUser);
   }
 }

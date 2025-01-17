@@ -1,4 +1,6 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { LoginUser } from 'src/auth/dto/LoginUser.dto';
 import { RegisterUser } from 'src/auth/dto/RegisterUser.dto';
@@ -9,6 +11,8 @@ import { User } from 'src/users/typeorm/entity/User';
 export class AuthService {
   constructor(
     @Inject('USER_SERVICE') private readonly userService: UsersService,
+    private readonly JwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
 
   async validateUser(loginUser: LoginUser): Promise<any> {
@@ -29,6 +33,11 @@ export class AuthService {
     } else {
       throw new HttpException('Failed', HttpStatus.NOT_ACCEPTABLE);
     }
+  }
+
+  async generateToken(loginUser: LoginUser): Promise<any> {
+    const accessToken = this.JwtService.sign({ email: loginUser.email });
+    return `Authentication=${accessToken}; HttpOnly; Path=/; Max-Age=${this.configService.get('JWT_EXPIRATION_TIME')}`;
   }
 
   async register(registerUser: RegisterUser): Promise<boolean> {
