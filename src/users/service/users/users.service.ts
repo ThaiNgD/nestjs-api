@@ -31,10 +31,14 @@ export class UsersService {
     });
   }
 
-  async findUserByUserId(userId: string): Promise<User[] | undefined> {
-    return this.userRepository.find({
+  async findUserByUserId(userId: string): Promise<User[] | HttpException> {
+    const user = await this.userRepository.find({
       where: { userId },
     });
+    if (user) {
+      return user;
+    }
+    throw new HttpException('User Not Found', HttpStatus.NOT_FOUND);
   }
 
   async updateUserById(userId: string, updateData: User): Promise<any> {

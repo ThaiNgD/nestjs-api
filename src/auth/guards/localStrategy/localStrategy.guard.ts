@@ -12,7 +12,7 @@ export class LocalAuthenticationGuard extends AuthGuard('jwt') {
     const { path } = request;
 
     // Exclude auth-related routes
-    const excludedRoutes = ['/auth/login', '/auth/register'];
+    const excludedRoutes = ['/auth/login', '/auth/register', '/auth/logout'];
     if (excludedRoutes.includes(path)) {
       return true; // Skip authentication for these routes
     }

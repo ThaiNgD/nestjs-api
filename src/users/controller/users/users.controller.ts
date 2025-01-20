@@ -12,12 +12,10 @@ import {
   Post,
   Put,
   Query,
-  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { CreateUser } from 'src/users/dto/CreateUser.dto';
-import { UsersGuard } from 'src/users/guards/users/users.guard';
 import { UsersService } from 'src/users/service/users/users.service';
 import { User } from 'src/users/typeorm/entity/User';
 
@@ -26,7 +24,7 @@ import { User } from 'src/users/typeorm/entity/User';
 export class UsersController {
   constructor(@Inject('USER_SERVICE') private userService: UsersService) {}
   @Get()
-  @UseGuards(UsersGuard)
+  // @UseGuards(UsersGuard)
   getUsers(@Query('sortDesc', ParseBoolPipe) sortDesc: boolean) {
     console.log(sortDesc);
     return this.userService.fetchUser(sortDesc);
