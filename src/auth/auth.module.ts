@@ -6,6 +6,7 @@ import { UsersService } from 'src/users/service/users/users.service';
 import { UsersModule } from 'src/users/users.module';
 import { AuthController } from './controller/auth/auth.controller';
 import { AuthService } from './service/auth/auth.service';
+import { JwtStrategy } from './utils/JWTStrategy';
 import { LocalStrategy } from './utils/LocalStrategy';
 
 @Module({
@@ -34,6 +35,7 @@ import { LocalStrategy } from './utils/LocalStrategy';
     },
     ConfigService,
     LocalStrategy,
+    JwtStrategy,
   ],
   controllers: [AuthController],
 })

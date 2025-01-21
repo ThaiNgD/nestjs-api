@@ -27,9 +27,14 @@ export class AuthController {
   @HttpCode(200)
   @UseGuards(LocalAuthenticationGuard)
   @Post('login')
-  async login(@Req() req: RequestWithUser) {
+  async login(
+    @Req() req: RequestWithUser,
+    @Res({ passthrough: true }) res: Response,
+  ) {
     const user = req.body;
     const headers = await this.authService.generateToken(user);
+    // res.cookie('jwt', headers);
+    res.setHeader('Set-Cookie', headers);
     return { user: user, headers: headers };
   }
 

@@ -5,9 +5,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { AuthModule } from './auth/auth.module';
 import { LocalAuthenticationGuard } from './auth/guards/localStrategy/localStrategy.guard';
+import { FormationModule } from './formation/formation.module';
 import { User } from './users/typeorm/entity/User';
 import { UsersModule } from './users/users.module';
-import { FormationModule } from './formation/formation.module';
 
 @Module({
   imports: [

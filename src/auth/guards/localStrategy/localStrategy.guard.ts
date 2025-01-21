@@ -10,15 +10,13 @@ export class LocalAuthenticationGuard extends AuthGuard('jwt') {
   canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest();
     const { path } = request;
-
     // Exclude auth-related routes
     const excludedRoutes = ['/auth/login', '/auth/register', '/auth/logout'];
     if (excludedRoutes.includes(path)) {
       return true; // Skip authentication for these routes
     }
-
     // Apply authentication for other routes
-    const user = request.user; // Assuming Passport is being used
+    const user = request.body; // Assuming Passport is being used
     return !!user; // Allow access if user is authenticated
   }
 }
